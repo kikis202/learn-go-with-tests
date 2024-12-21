@@ -15,24 +15,25 @@ const frenchHelloPrefix = "Bonjour, "
 const helloSuffix = "!"
 
 func Hello(name, lang string) string {
-	if name == "" {
-		if lang == spanish {
+	prefix := englishHelloPrefix
+	switch lang {
+	case spanish:
+		if name == "" {
 			name = spanishWorld
-		} else if lang == french {
+		}
+		prefix = spanishHelloPrefix
+	case french:
+		if name == "" {
 			name = frenchWorld
-		} else {
+		}
+		prefix = frenchHelloPrefix
+	default:
+		if name == "" {
 			name = englishWorld
 		}
 	}
 
-	if lang == spanish {
-		return spanishHelloPrefix + name + helloSuffix
-	}
-	if lang == french {
-		return frenchHelloPrefix + name + helloSuffix
-	}
-
-	return englishHelloPrefix + name + helloSuffix
+	return prefix + name + helloSuffix
 }
 
 func main() {
