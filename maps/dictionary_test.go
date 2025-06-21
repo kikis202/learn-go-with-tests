@@ -7,9 +7,9 @@ func TestSearch(t *testing.T) {
 	t.Run("search", func(t *testing.T) {
 		key := "test"
 		value := "this is just a test"
-		dictionary := map[string]string{key: value}
+		dictionary := Dictionary{key: value}
 
-		got := Search(dictionary, key)
+		got := dictionary.Search(key)
 		want := value
 
 		assertStrings(t, got, want)
