@@ -57,6 +57,32 @@ func TestAdd(t *testing.T) {
 	})
 }
 
+func TestUpdate(t *testing.T) {
+	newValue := "new test"
+
+	t.Run("update existing value", func(t *testing.T) {
+
+		dictionary := Dictionary{key: value}
+		err := dictionary.Update(key, newValue)
+		if err != nil {
+			t.Fatal("should update existing word:")
+		}
+
+		assertDefinition(t, dictionary, key, newValue)
+	})
+
+	t.Run("update non-existing value", func(t *testing.T) {
+
+		dictionary := Dictionary{}
+		err := dictionary.Update(key, newValue)
+		if err == nil {
+			t.Fatal("shouldnt update non-existing words definition")
+		}
+
+		assertDefinitionError(t, dictionary, key)
+	})
+}
+
 func assertStrings(t testing.TB, got, want string) {
 	t.Helper()
 
@@ -84,5 +110,15 @@ func assertDefinition(t testing.TB, dictionary Dictionary, key, value string) {
 
 	if got != value {
 		t.Errorf("got %q want %q", got, value)
+	}
+}
+
+func assertDefinitionError(t testing.TB, dictionary Dictionary, key string) {
+	t.Helper()
+
+	_, err := dictionary.Search(key)
+
+	if err == nil {
+		t.Fatal("expected to not find the key", err)
 	}
 }
