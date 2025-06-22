@@ -83,6 +83,25 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
+func TestDelete(t *testing.T) {
+
+	t.Run("delete non-existing value", func(t *testing.T) {
+
+		dictionary := Dictionary{}
+		err := dictionary.Delete(key)
+		assertError(t, err, ErrWordNotFound)
+	})
+
+	t.Run("deltete existing value", func(t *testing.T) {
+
+		dictionary := Dictionary{key: value}
+		err := dictionary.Delete(key)
+
+		assertError(t, err, nil)
+		assertDefinitionError(t, dictionary, key)
+	})
+}
+
 func assertStrings(t testing.TB, got, want string) {
 	t.Helper()
 
