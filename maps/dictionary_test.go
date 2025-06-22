@@ -79,6 +79,7 @@ func TestUpdate(t *testing.T) {
 			t.Fatal("shouldnt update non-existing words definition")
 		}
 
+		assertError(t, err, ErrWordDoesNotExist)
 		assertDefinitionError(t, dictionary, key)
 	})
 }
@@ -89,7 +90,7 @@ func TestDelete(t *testing.T) {
 
 		dictionary := Dictionary{}
 		err := dictionary.Delete(key)
-		assertError(t, err, ErrWordNotFound)
+		assertError(t, err, ErrWordDoesNotExist)
 	})
 
 	t.Run("deltete existing value", func(t *testing.T) {

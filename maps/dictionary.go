@@ -4,8 +4,9 @@ type Dictionary map[string]string
 type DictionaryErr string
 
 var (
-	ErrWordNotFound = DictionaryErr("could not find the word you are looking for")
-	ErrWordExists   = DictionaryErr("word already defined")
+	ErrWordNotFound     = DictionaryErr("could not find the word you are looking for")
+	ErrWordExists       = DictionaryErr("cannot add word, because it already defined")
+	ErrWordDoesNotExist = DictionaryErr("cannot preform action on non-defined word")
 )
 
 func (e DictionaryErr) Error() string {
@@ -41,6 +42,8 @@ func (d Dictionary) Update(word, definition string) error {
 	_, err := d.Search(word)
 
 	switch err {
+	case ErrWordNotFound:
+		return ErrWordDoesNotExist
 	case nil:
 		d[word] = definition
 	default:
@@ -55,6 +58,8 @@ func (d Dictionary) Delete(word string) error {
 	_, err := d.Search(word)
 
 	switch err {
+	case ErrWordNotFound:
+		return ErrWordDoesNotExist
 	case nil:
 		delete(d, word)
 	default:
