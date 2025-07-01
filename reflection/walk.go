@@ -37,7 +37,6 @@ func walk(x interface{}, fn func(input string)) {
 		for _, res := range valFnRes {
 			walkValue(res)
 		}
-
 	}
 }
 
