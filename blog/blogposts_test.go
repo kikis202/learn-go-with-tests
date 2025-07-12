@@ -19,9 +19,16 @@ func (s StubFailingFS) Open(name string) (fs.File, error) {
 
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("reading FS with files should return corresponding posts", func(t *testing.T) {
+		const (
+			firstBody = `Title: Post1
+Description: Description1`
+			secondBody = `Title: Post2
+Description: Description2`
+		)
+
 		fs := fstest.MapFS{
-			"hello world.md":  {Data: []byte("Title: Post1")},
-			"hello-world2.md": {Data: []byte("Title: Post2")},
+			"hello world.md":  {Data: []byte(firstBody)},
+			"hello-world2.md": {Data: []byte(secondBody)},
 		}
 
 		posts, err := blogposts.NewPostsFromFs(fs)
@@ -35,8 +42,14 @@ func TestNewBlogPosts(t *testing.T) {
 		}
 
 		want := []blogposts.Post{
-			{Title: "Post1"},
-			{Title: "Post2"},
+			{
+				Title:       "Post1",
+				Description: "Description1",
+			},
+			{
+				Title:       "Post2",
+				Description: "Description2",
+			},
 		}
 
 		assertAllPosts(t, posts, want)
