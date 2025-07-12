@@ -3,6 +3,7 @@ package blogposts_test
 import (
 	"errors"
 	"io/fs"
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -19,8 +20,8 @@ func (s StubFailingFS) Open(name string) (fs.File, error) {
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("reading FS with files should return corresponding posts", func(t *testing.T) {
 		fs := fstest.MapFS{
-			"hello world.md":  {Data: []byte("hi")},
-			"hello-world2.md": {Data: []byte("hola")},
+			"hello world.md":  {Data: []byte("Title: Post1")},
+			"hello-world2.md": {Data: []byte("Title: Post2")},
 		}
 
 		posts, err := blogposts.NewPostsFromFs(fs)
@@ -31,6 +32,15 @@ func TestNewBlogPosts(t *testing.T) {
 
 		if len(posts) != len(fs) {
 			t.Errorf("got %d posts, wanted %d posts", len(posts), len(fs))
+		}
+
+		want := []blogposts.Post{
+			{Title: "Post1"},
+			{Title: "Post2"},
+		}
+
+		if !reflect.DeepEqual(posts, want) {
+			t.Errorf("got %+v, want %+v", posts, want)
 		}
 	})
 
