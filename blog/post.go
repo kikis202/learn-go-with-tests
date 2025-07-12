@@ -29,22 +29,20 @@ func newPost(postFile io.Reader) (Post, error) {
 		return strings.TrimPrefix(scanner.Text(), tagName)
 	}
 
-	title := readMetaLine(titleSeperator)
-	description := readMetaLine(descriptionSeperator)
-	tags := strings.Split(readMetaLine(tagSeperator), ", ")
+	readBody := func() string {
+		scanner.Scan() // ignore the `---` line
+		buf := bytes.Buffer{}
+		for scanner.Scan() {
+			fmt.Fprintln(&buf, scanner.Text())
+		}
+		return strings.TrimSuffix(buf.String(), "\n")
 
-	scanner.Scan() // ignore the `---` line
-
-	buf := bytes.Buffer{}
-	for scanner.Scan() {
-		fmt.Fprintln(&buf, scanner.Text())
 	}
-	body := strings.TrimSuffix(buf.String(), "\n")
 
 	return Post{
-		Title:       title,
-		Description: description,
-		Tags:        tags,
-		Body:        body,
+		Title:       readMetaLine(titleSeperator),
+		Description: readMetaLine(descriptionSeperator),
+		Tags:        strings.Split(readMetaLine(tagSeperator), ", "),
+		Body:        readBody(),
 	}, nil
 }
