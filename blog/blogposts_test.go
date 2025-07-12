@@ -21,9 +21,11 @@ func TestNewBlogPosts(t *testing.T) {
 	t.Run("reading FS with files should return corresponding posts", func(t *testing.T) {
 		const (
 			firstBody = `Title: Post1
-Description: Description1`
+Description: Description1
+Tags: tdd, go`
 			secondBody = `Title: Post2
-Description: Description2`
+Description: Description2
+Tags: tag1, tag2`
 		)
 
 		fs := fstest.MapFS{
@@ -45,10 +47,12 @@ Description: Description2`
 			{
 				Title:       "Post1",
 				Description: "Description1",
+				Tags:        []string{"tdd", "go"},
 			},
 			{
 				Title:       "Post2",
 				Description: "Description2",
+				Tags:        []string{"tag1", "tag2"},
 			},
 		}
 
