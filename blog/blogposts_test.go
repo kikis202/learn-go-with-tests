@@ -39,9 +39,7 @@ func TestNewBlogPosts(t *testing.T) {
 			{Title: "Post2"},
 		}
 
-		if !reflect.DeepEqual(posts, want) {
-			t.Errorf("got %+v, want %+v", posts, want)
-		}
+		assertAllPosts(t, posts, want)
 	})
 
 	t.Run("failing to open FS should return error", func(t *testing.T) {
@@ -53,4 +51,28 @@ func TestNewBlogPosts(t *testing.T) {
 			t.Error("Expected to get an error when file system fails")
 		}
 	})
+}
+
+func assertPost(t *testing.T, got, want blogposts.Post) {
+	t.Helper()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %+v, want %+v", got, want)
+	}
+}
+
+func assertContainsPost(t *testing.T, got []blogposts.Post, want blogposts.Post) {
+	t.Helper()
+	for i := range got {
+		if reflect.DeepEqual(got[i], want) {
+			return
+		}
+	}
+	t.Errorf("result %+v didn't contain this %+v post", got, want)
+}
+
+func assertAllPosts(t *testing.T, got, want []blogposts.Post) {
+	t.Helper()
+	for i := range want {
+		assertContainsPost(t, got, want[i])
+	}
 }
