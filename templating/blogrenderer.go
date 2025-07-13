@@ -1,27 +1,23 @@
 package blogrenderer
 
 import (
-	"fmt"
+	"html/template"
 	"io"
 
 	blogposts "github.com/kikis202/learn-go-with-tests/learnGoWithTests/blog"
 )
 
+const (
+	postTemplate = "<h1>{{.Title}}</h1><p>{{.Description}}</p>Tags: <ul>{{range .Tags}}<li>{{.}}</li>{{end}}</ul>"
+)
+
 func Render(w io.Writer, post blogposts.Post) error {
-	_, err := fmt.Fprintf(w, "<h1>%s</h1>\n<p>%s</p>\n", post.Title, post.Description)
+	templ, err := template.New("blog").Parse(postTemplate)
 	if err != nil {
 		return err
 	}
 
-	_, err = fmt.Fprint(w, "Tags: <ul>")
-	for _, tag := range post.Tags {
-		fmt.Fprintf(w, "<li>%s</li>", tag)
-		if err != nil {
-			return err
-		}
-	}
-	_, err = fmt.Fprint(w, "</ul>")
-	if err != nil {
+	if err := templ.Execute(w, post); err != nil {
 		return err
 	}
 
