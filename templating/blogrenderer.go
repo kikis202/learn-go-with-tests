@@ -1,23 +1,25 @@
 package blogrenderer
 
 import (
+	"embed"
 	"html/template"
 	"io"
 
 	blogposts "github.com/kikis202/learn-go-with-tests/learnGoWithTests/blog"
 )
 
-const (
-	postTemplate = "<h1>{{.Title}}</h1><p>{{.Description}}</p>Tags: <ul>{{range .Tags}}<li>{{.}}</li>{{end}}</ul>"
+var (
+	//go:embed "templates/*"
+	postTemplates embed.FS
 )
 
 func Render(w io.Writer, post blogposts.Post) error {
-	templ, err := template.New("blog").Parse(postTemplate)
+	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
 	if err != nil {
 		return err
 	}
 
-	if err := templ.Execute(w, post); err != nil {
+	if err := templ.ExecuteTemplate(w, "blog.gohtml", post); err != nil {
 		return err
 	}
 

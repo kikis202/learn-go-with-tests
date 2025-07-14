@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"testing"
 
+	approvals "github.com/approvals/go-approval-tests"
 	blogposts "github.com/kikis202/learn-go-with-tests/learnGoWithTests/blog"
 	blogrenderer "github.com/kikis202/learn-go-with-tests/learnGoWithTests/templating"
 )
@@ -24,12 +25,6 @@ func TestRender(t *testing.T) {
 			t.Fatalf("Didnt expect an error, but got %q", err)
 		}
 
-		got := buf.String()
-		want := `<h1>hello world</h1><p>This is a description</p>Tags: <ul><li>go</li><li>tdd</li></ul>`
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-
+		approvals.VerifyString(t, buf.String())
 	})
 }
