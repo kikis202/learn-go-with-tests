@@ -4,7 +4,7 @@ func Sum(arr []int) (sum int) {
 	add := func(acc, v int) int {
 		return acc + v
 	}
-	return Reduce(arr, add)
+	return Reduce(arr, add, 0)
 }
 
 func SumAll(numbersToSum ...[]int) []int {
@@ -27,11 +27,11 @@ func SumAllTails(numbersToSum ...[]int) []int {
 		return acc
 	}
 
-	return Reduce(numbersToSum, sumTail)
+	return Reduce(numbersToSum, sumTail, []int{})
 }
 
-func Reduce[T any](arr []T, f func(sum T, val T) T) T {
-	var sums T
+func Reduce[T any](arr []T, f func(sum T, val T) T, initialVal T) T {
+	sums := initialVal
 	for _, val := range arr {
 		sums = f(sums, val)
 	}
