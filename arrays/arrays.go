@@ -30,7 +30,7 @@ func SumAllTails(numbersToSum ...[]int) []int {
 	return Reduce(numbersToSum, sumTail, []int{})
 }
 
-func Reduce[T any](arr []T, f func(sum T, val T) T, initialVal T) T {
+func Reduce[T any](arr []T, f func(sum, val T) T, initialVal T) T {
 	sums := initialVal
 	for _, val := range arr {
 		sums = f(sums, val)
