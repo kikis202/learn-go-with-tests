@@ -15,7 +15,7 @@ func TestAssertFunctions(t *testing.T) {
 
 func TestStack(t *testing.T) {
 	t.Run("integer stack", func(t *testing.T) {
-		myStackOfInts := new(StackOfInts)
+		myStackOfInts := NewStack[int]()
 
 		AssertTrue(t, myStackOfInts.IsEmpty())
 

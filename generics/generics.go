@@ -1,20 +1,25 @@
 package generics
 
-type StackOfInts struct {
-	values []int
+type Stack[T any] struct {
+	values []T
 }
 
-func (s *StackOfInts) Push(value int) {
+func NewStack[T any]() *Stack[T] {
+	return new(Stack[T])
+}
+
+func (s *Stack[T]) Push(value T) {
 	s.values = append(s.values, value)
 }
 
-func (s *StackOfInts) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return len(s.values) == 0
 }
 
-func (s *StackOfInts) Pop() (int, bool) {
+func (s *Stack[T]) Pop() (T, bool) {
 	if s.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	index := len(s.values) - 1
