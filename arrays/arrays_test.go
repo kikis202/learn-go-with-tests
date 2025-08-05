@@ -97,3 +97,31 @@ func TestBadBank(t *testing.T) {
 	AssertEqual(t, newBalanceFor(chris), 0)
 	AssertEqual(t, newBalanceFor(adil), 175)
 }
+
+func AssertTrue(t *testing.T, val bool) {
+	t.Helper()
+	if !val {
+		t.Error("Expected the value to be true")
+	}
+}
+
+func Find[T any](arr []T, f func(x T) bool) (value T, found bool) {
+	for _, v := range arr {
+		if f(v) {
+			return v, true
+		}
+	}
+	return
+}
+
+func TestFind(t *testing.T) {
+	t.Run("find first even number", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8}
+
+		firstEvenNumber, found := Find(numbers, func(x int) bool {
+			return x%2 == 0
+		})
+		AssertTrue(t, found)
+		AssertEqual(t, firstEvenNumber, 2)
+	})
+}
