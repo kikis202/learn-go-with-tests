@@ -1,11 +1,10 @@
 package arrays
 
 func Sum(arr []int) (sum int) {
-	for _, val := range arr {
-		sum += val
+	add := func(acc, v int) int {
+		return acc + v
 	}
-
-	return
+	return Reduce(arr, add)
 }
 
 func SumAll(numbersToSum ...[]int) []int {
@@ -17,15 +16,24 @@ func SumAll(numbersToSum ...[]int) []int {
 }
 
 func SumAllTails(numbersToSum ...[]int) []int {
-	var sums []int
-	for _, numbers := range numbersToSum {
-		if len(numbers) == 0 {
-			sums = append(sums, 0)
+	sumTail := func(acc, v []int) []int {
+		if len(v) == 0 {
+			acc = append(acc, 0)
 		} else {
-			tail := numbers[1:]
-			sums = append(sums, Sum(tail))
+			tail := v[1:]
+			acc = append(acc, Sum(tail))
 		}
+
+		return acc
 	}
 
+	return Reduce(numbersToSum, sumTail)
+}
+
+func Reduce[T any](arr []T, f func(sum T, val T) T) T {
+	var sums T
+	for _, val := range arr {
+		sums = f(sums, val)
+	}
 	return sums
 }
