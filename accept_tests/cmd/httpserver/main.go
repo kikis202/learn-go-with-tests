@@ -3,11 +3,11 @@ package main
 import (
 	"net/http"
 
-	go_specs_greet "github.com/kikis202/learn-go-with-tests/go-specs-greet"
+	"github.com/kikis202/learn-go-with-tests/go-specs-greet/adapters/httpserver"
 )
 
 func main() {
-	handler := http.HandlerFunc(go_specs_greet.Handler)
+	handler := http.HandlerFunc(httpserver.Handler)
 	http.ListenAndServe(":8080", handler)
 
 }
