@@ -1,4 +1,4 @@
-package specifications
+package go_specs_greet
 
 import (
 	"io"
