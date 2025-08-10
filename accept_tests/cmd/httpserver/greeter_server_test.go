@@ -2,8 +2,10 @@ package main_test
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/alecthomas/assert/v2"
 	"github.com/kikis202/learn-go-with-tests/go-specs-greet/specifications"
@@ -34,6 +36,10 @@ func TestGreeterServer(t *testing.T) {
 		assert.NoError(t, container.Terminate(ctx))
 	})
 
-	driver := specifications.Driver{BaseURL: "http://localhost:8080"}
+	client := http.Client{
+		Timeout: 1 * time.Second,
+	}
+
+	driver := specifications.Driver{BaseURL: "http://localhost:8080", Client: &client}
 	specifications.GreetSpecification(t, driver)
 }
